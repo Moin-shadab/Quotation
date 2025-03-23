@@ -163,10 +163,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="details-box">
                         <h3>Quotation By:</h3>
                         AUM Automation Engineering<br>
-                        Address: Mayapuri Road near Raj Palace, Karnal, Haryana<br>
-                        PIN Code: 132001<br>
-                        Phone: +91-94664-34307, +91-85728-36307<br>
-                        Email: info@aumautomation.com
+                        Address: XXXXX XXXX XXXX XXX XXXX, XXXX, XXXX<br>
+                        PIN Code: XXX<br>
+                        Phone: +91-94664-XXXXX, +91-85728-XXXXX<br>
+                        Email: info___.com
                     </div>
                     <div class="details-box">
                         <h3>Quotation To:</h3>
