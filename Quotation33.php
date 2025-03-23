@@ -1,180 +1,60 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['items']) && !empty($_POST['items']) && !empty($_POST['client_name'])) {
-        ?>
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Quotation - AUM AUTOMATION ENGINEERING</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    margin: 20px;
-                    background-color: #f9f9f9;
-                }
-                .container {
-                    max-width: 900px;
-                    margin: auto;
-                    background: #fff;
-                    padding: 20px;
-                    border-radius: 8px;
-                    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-                }
-                .header {
-                    text-align: center;
-                    margin-bottom: 20px;
-                }
-                .header h1 {
-                    margin: 0;
-                    font-size: 24px;
-                    color: #333;
-                }
-                .details-container {
-                    display: flex;
-                    justify-content: space-between;
-                    padding: 10px;
-                    border: 1px solid #ddd;
-                    border-radius: 5px;
-                    background-color: #f8f8f8;
-                    font-size: 14px;
-                }
-                .details-box {
-                    width: 48%;
-                    font-weight: bold;
-                    color: #333;
-                }
-                .table-title {
-                    background-color: #007bff;
-                    color: white;
-                    padding: 8px;
-                    border-radius: 4px;
-                    text-align: center;
-                    font-size: 16px;
-                    margin-bottom: 5px;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin-top: 20px;
-                }
-                th, td {
-                    border: 1px solid #ddd;
-                    padding: 10px;
-                    text-align: center;
-                }
-                th {
-                    background-color: #007bff;
-                    color: white;
-                }
-                .total-row {
-                    font-weight: bold;
-                    background-color: #f2f2f2;
-                }
-                .btn-container {
-                    text-align: center;
-                    margin-top: 20px;
-                }
-                .btn {
-                    padding: 10px 15px;
-                    border: none;
-                    background-color: #28a745;
-                    color: white;
-                    cursor: pointer;
-                    font-size: 16px;
-                    border-radius: 5px;
-                }
-                .btn:hover {
-                    background-color: #218838;
-                }
-                @media print {
-                    .btn-container {
-                        display: none;
-                    }
-                }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <div class="header">
-                    <h1>AUM AUTOMATION ENGINEERING</h1>
-                    <p>Quotation</p>
-                </div>
+        $csvFileName = "AUM_AUTOMATION_ENGINEERING_quotation_" . date('YmdHis') . ".csv";
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $csvFileName . '"');
 
-                <!-- Company & Client Details Side by Side -->
-                <div class="details-container">
-                    <div class="details-box">
-                        <div class="table-title">Our Details</div>
-                        AUM AUTOMATION ENGINEERING <br>
-                        Address: Mayapuri Road near Raj Palace ,Karnal, Haryana | PIN Code: 132001 | Phone: 9466434307,8572836307
-                    </div>
+        $output = fopen('php://output', 'w');
 
-                    <div class="details-box">
-                        <div class="table-title">Client Details</div>
-                        <?= htmlspecialchars($_POST['client_name']) ?> <br>
-                        Address: <?= htmlspecialchars($_POST['client_address']) ?> | GSTIN: <?= htmlspecialchars($_POST['client_gst']) ?> | Phone: <?= htmlspecialchars($_POST['client_phone']) ?>
-                    </div>
-                </div>
+        // Header Section: Company Details (Left) and Client Details (Right)
+        fputcsv($output, ['AUM AUTOMATION ENGINEERING', '', '', '', 'Client Details'], ',', '"', '\\');
+        fputcsv($output, ['Address: ABC, From State', '', '', '', 'Company Name: ' . htmlspecialchars($_POST['client_name'])], ',', '"', '\\');
+        fputcsv($output, ['PIN Code: 123456', '', '', '', 'Address: ' . htmlspecialchars($_POST['client_address'])], ',', '"', '\\');
+        fputcsv($output, ['Phone: 127927927', '', '', '', 'GSTIN: ' . htmlspecialchars($_POST['client_gst'])], ',', '"', '\\');
+        fputcsv($output, ['', '', '', '', 'Phone: ' . htmlspecialchars($_POST['client_phone'])], ',', '"', '\\');
+        fputcsv($output, [], ',', '"', '\\'); // Spacing
 
-                <!-- Quotation Table -->
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Sr No</th>
-                            <th>Item Name</th>
-                            <th>Qty</th>
-                            <th>Unit Price (₹)</th>
-                            <th>GST (%)</th>
-                            <th>Total Excl. GST (₹)</th>
-                            <th>GST Amount (₹)</th>
-                            <th>Total Incl. GST (₹)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $grandTotal = 0;
-                        foreach ($_POST['items'] as $index => $item) {
-                            $srNo = $index + 1;
-                            $itemName = htmlspecialchars($item['name'] ?? 'N/A');
-                            $qty = (int) ($item['qty'] ?? 0);
-                            $gst = (float) ($item['gst'] ?? 18);
-                            $unitPrice = (float) ($item['price'] ?? 0);
+        // Quotation Title
+        fputcsv($output, ['Quotation'], ',', '"', '\\');
+        fputcsv($output, [], ',', '"', '\\'); // Spacing
 
-                            $totalExclGst = $qty * $unitPrice;
-                            $gstAmount = $totalExclGst * ($gst / 100);
-                            $totalInclGst = $totalExclGst + $gstAmount;
+        // Quotation Headers
+        fputcsv($output, ['Sr No', 'Item Name', 'Qty', 'Unit Price (₹)', 'GST (%)', 'Total Excl. GST (₹)', 'GST Amount (₹)', 'Total Incl. GST (₹)'], ',', '"', '\\');
 
-                            $grandTotal += $totalInclGst;
+        $grandTotal = 0;
+        foreach ($_POST['items'] as $index => $item) {
+            $srNo = $index + 1;
+            $itemName = htmlspecialchars($item['name'] ?? 'N/A');
+            $qty = (int) ($item['qty'] ?? 0);
+            $gst = (float) ($item['gst'] ?? 18); // Default GST 18%
+            $unitPrice = (float) ($item['price'] ?? 0);
 
-                            echo "<tr>
-                                <td>$srNo</td>
-                                <td>$itemName</td>
-                                <td>$qty</td>
-                                <td>₹" . number_format($unitPrice, 2) . "</td>
-                                <td>$gst%</td>
-                                <td>₹" . number_format($totalExclGst, 2) . "</td>
-                                <td>₹" . number_format($gstAmount, 2) . "</td>
-                                <td>₹" . number_format($totalInclGst, 2) . "</td>
-                            </tr>";
-                        }
-                        ?>
-                    </tbody>
-                    <tfoot>
-                        <tr class="total-row">
-                            <td colspan="7" style="text-align: right;">Grand Total</td>
-                            <td>₹<?= number_format($grandTotal, 2) ?></td>
-                        </tr>
-                    </tfoot>
-                </table>
+            $totalExclGst = $qty * $unitPrice;
+            $gstAmount = $totalExclGst * ($gst / 100);
+            $totalInclGst = $totalExclGst + $gstAmount;
 
-                <div class="btn-container">
-                    <button class="btn" onclick="window.print()">Download PDF</button>
-                </div>
-            </div>
-        </body>
-        </html>
-        <?php
+            $grandTotal += $totalInclGst;
+
+            fputcsv($output, [
+                $srNo,
+                $itemName,
+                $qty,
+                number_format($unitPrice, 2),
+                $gst,
+                number_format($totalExclGst, 2),
+                number_format($gstAmount, 2),
+                number_format($totalInclGst, 2)
+            ], ',', '"', '\\');
+        }
+
+        // Spacing before Grand Total
+        fputcsv($output, [], ',', '"', '\\');
+
+        // Grand Total (aligned to the right)
+        fputcsv($output, ['', '', '', '', '', '', 'Grand Total', number_format($grandTotal, 2)], ',', '"', '\\');
+
+        fclose($output);
         exit();
     } else {
         echo "Please fill in all required fields (client name and at least one item).";
@@ -182,8 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">

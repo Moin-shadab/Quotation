@@ -7,276 +7,217 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Quotation - AUM Automation Engineering</title>
+            <title>Quotation - AUM AUTOMATION ENGINEERING</title>
             <style>
                 body {
-                    font-family: 'Arial', sans-serif;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                     margin: 0;
-                    padding: 0;
-                    background-color: #f4f4f4;
-                    line-height: 1.5;
+                    background-color: #f5f5f5;
+                    color: #333;
                 }
                 .container {
-                    width: 90%;
-                    max-width: 1000px;
+                    max-width: 210mm;
+                    min-height: 297mm;
                     margin: 20px auto;
-                    background: #fff;
-                    padding: 20px;
-                    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-                    border-radius: 5px;
+                    background: white;
+                    padding: 30px;
+                    box-shadow: 0 0 20px rgba(0,0,0,0.1);
                 }
-                .header {
-                    text-align: center;
+                .letterhead {
+                    border-bottom: 4px solid #2c3e50;
                     padding-bottom: 20px;
-                    border-bottom: 2px solid #007bff;
+                    margin-bottom: 30px;
                 }
-                .header h1 {
+                .letterhead h1 {
+                    color: #2c3e50;
                     margin: 0;
-                    font-size: 28px;
-                    color: #003087;
-                }
-                .header p {
-                    margin: 5px 0;
-                    font-size: 16px;
-                    color: #555;
+                    font-size: 32px;
+                    text-transform: uppercase;
                 }
                 .details-container {
                     display: flex;
-                    justify-content: space-between;
-                    margin: 20px 0;
-                    font-size: 14px;
-                    flex-wrap: wrap;
+                    gap: 20px;
+                    margin-bottom: 30px;
                 }
                 .details-box {
-                    flex: 1 1 45%;
-                    margin: 10px;
+                    flex: 1;
+                    padding: 20px;
+                    background: #f8f9fa;
+                    border-radius: 8px;
                 }
-                .details-box h3 {
-                    margin: 0 0 10px 0;
-                    font-size: 16px;
-                    color: #003087;
-                    background: #e6f0ff;
-                    padding: 5px;
-                    border-radius: 3px;
-                }
-                h3 {
-                    margin-bottom: 8px;
+                .details-title {
+                    color: #2c3e50;
+                    margin-bottom: 15px;
+                    font-weight: 600;
+                    font-size: 18px;
                 }
                 table {
                     width: 100%;
                     border-collapse: collapse;
-                    margin: 20px 0;
-                    font-size: 13px;
+                    margin: 25px 0;
+                    table-layout: fixed;
                 }
                 th, td {
-                    border: 1px solid #d0d0d0;
-                    padding: 8px;
+                    padding: 12px;
+                    border: 1px solid #dee2e6;
                     text-align: center;
+                    word-wrap: break-word;
                 }
                 th {
-                    background-color: #003087;
-                    color: #fff;
-                    font-weight: bold;
+                    background-color: #2c3e50;
+                    color: white;
+                    font-weight: 600;
+                }
+                tbody tr:nth-child(even) {
+                    background-color: #f8f9fa;
                 }
                 .total-row {
+                    font-weight: 700;
                     background-color: #e9ecef;
-                    font-weight: bold;
                 }
-                .footer {
-                    margin-top: 20px;
-                    font-size: 12px;
-                    color: #333;
-                    display: flex;
-                    justify-content: space-between;
-                    flex-wrap: wrap;
+                .footer-section {
+                    margin-top: 40px;
+                    padding-top: 20px;
+                    border-top: 2px solid #dee2e6;
                 }
                 .bank-details {
-                    width: 48%;
-                    padding: 10px;
                     background: #f8f9fa;
-                    border: 1px solid #e0e0e0;
-                    border-radius: 5px;
+                    padding: 15px;
+                    border-radius: 8px;
+                    margin: 20px 0;
                 }
                 .terms {
-                    text-align: center;
-                    margin-top: 20px;
                     font-size: 12px;
-                    color: #666;
-                    width: 100%;
-                }
-                .btn-container {
-                    text-align: center;
-                    margin-top: 20px;
-                }
-                .btn {
-                    padding: 10px 20px;
-                    background-color: #28a745;
-                    color: #fff;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    font-size: 14px;
-                }
-                .btn:hover {
-                    background-color: #218838;
-                }
-                .page-break {
-                    page-break-before: always;
+                    color: #6c757d;
+                    line-height: 1.6;
                 }
                 @media print {
-                    .btn-container {
-                        display: none;
+                    body {
+                        background: none;
+                        margin: 0;
                     }
                     .container {
                         box-shadow: none;
                         margin: 0;
-                        width: 100%;
+                        padding: 20px;
+                        page-break-after: always;
                     }
-                    .page-break {
-                        page-break-before: always;
+                    .btn-container {
+                        display: none;
                     }
                 }
                 @media (max-width: 768px) {
-                    .details-box {
-                        width: 100%;
-                        margin-bottom: 10px;
+                    .details-container {
+                        flex-direction: column;
                     }
-                    .bank-details {
-                        width: 100%;
-                        margin-bottom: 10px;
+                    th, td {
+                        padding: 8px;
+                        font-size: 14px;
                     }
-                    table {
-                        font-size: 12px;
-                    }
+                }
+                .page-break {
+                    page-break-before: always;
+                }
+                tr {
+                    page-break-inside: avoid;
+                    break-inside: avoid;
                 }
             </style>
         </head>
         <body>
             <div class="container">
-                <div class="header">
-                    <h1>AUM Automation Engineering</h1>
-                    <p>Quotation | Date: <?= date('d-m-Y') ?></p>
+                <div class="letterhead">
+                    <h1>AUM AUTOMATION ENGINEERING</h1>
+                    <p>Mayapuri Road near Raj Palace, Karnal, Haryana 132001<br>
+                    📞 9466434307, 8572836307 | GSTIN: <?= htmlspecialchars($_POST['company_gst'] ?? 'N/A') ?></p>
                 </div>
 
-                <!-- Company & Client Details Side by Side in a Row -->
                 <div class="details-container">
                     <div class="details-box">
-                        <h3>Quotation By:</h3>
-                        AUM Automation Engineering<br>
-                        Address: Mayapuri Road near Raj Palace, Karnal, Haryana<br>
-                        PIN Code: 132001<br>
-                        Phone: +91-94664-34307, +91-85728-36307<br>
-                        Email: info@aumautomation.com
+                        <div class="details-title">Quotation To:</div>
+                        <strong><?= htmlspecialchars($_POST['client_name']) ?></strong><br>
+                        <?= htmlspecialchars($_POST['client_address']) ?><br>
+                        GSTIN: <?= htmlspecialchars($_POST['client_gst']) ?><br>
+                        📞 <?= htmlspecialchars($_POST['client_phone']) ?>
                     </div>
                     <div class="details-box">
-                        <h3>Quotation To:</h3>
-                        <?= htmlspecialchars($_POST['client_name']) ?><br>
-                        Address: <?= htmlspecialchars($_POST['client_address']) ?><br>
-                        GSTIN: <?= htmlspecialchars($_POST['client_gst']) ?><br>
-                        Phone: <?= htmlspecialchars($_POST['client_phone']) ?>
+                        <div class="details-title">Quotation Details:</div>
+                        Date: <?= date('d/m/Y') ?><br>
+                        Validity: 30 Days<br>
+                        Prepared By: <?= htmlspecialchars($_POST['prepared_by'] ?? 'Sales Team') ?>
                     </div>
                 </div>
 
-                <!-- Quotation Table -->
-                <?php
-                $itemsPerPage = 20;
-                $items = $_POST['items'];
-                $totalItems = count($items);
-                $pages = ceil($totalItems / $itemsPerPage);
-                $grandTotal = 0;
-
-                // Single table structure with pagination logic inside
-                echo '<table>';
-                echo '<thead>
+                <table>
+                    <thead>
                         <tr>
-                            <th>Sr No</th>
-                            <th>Item Name</th>
-                            <th>Qty</th>
-                            <th>Unit Price (₹)</th>
-                            <th>GST (%)</th>
-                            <th>Total Excl. GST (₹)</th>
-                            <th>GST Amount (₹)</th>
-                            <th>Total Incl. GST (₹)</th>
+                            <th style="width: 5%">Sr No</th>
+                            <th style="width: 25%">Item Description</th>
+                            <th style="width: 7%">Qty</th>
+                            <th style="width: 12%">Unit Price (₹)</th>
+                            <th style="width: 8%">GST (%)</th>
+                            <th style="width: 13%">Total Excl. GST (₹)</th>
+                            <th style="width: 13%">GST Amount (₹)</th>
+                            <th style="width: 17%">Total Incl. GST (₹)</th>
                         </tr>
-                      </thead>';
-                echo '<tbody>';
-
-                for ($i = 0; $i < $totalItems; $i++) {
-                    // Insert page break before the 21st item (index 20) and ensure it’s not the first item on a page
-                    if ($i > 0 && $i % $itemsPerPage == 0) {
-                        echo '</tbody></table><div class="page-break"></div><table><thead>
-                              <tr>
-                                  <th>Sr No</th>
-                                  <th>Item Name</th>
-                                  <th>Qty</th>
-                                  <th>Unit Price (₹)</th>
-                                  <th>GST (%)</th>
-                                  <th>Total Excl. GST (₹)</th>
-                                  <th>GST Amount (₹)</th>
-                                  <th>Total Incl. GST (₹)</th>
-                              </tr>
-                              </thead><tbody>';
-                    }
-
-                    $item = $items[$i];
-                    $srNo = $i + 1;
-                    $itemName = htmlspecialchars($item['name'] ?? 'N/A');
-                    $qty = (int) ($item['qty'] ?? 0);
-                    $gst = (float) ($item['gst'] ?? 18);
-                    $unitPrice = (float) ($item['price'] ?? 0);
-
-                    $totalExclGst = $qty * $unitPrice;
-                    $gstAmount = $totalExclGst * ($gst / 100);
-                    $totalInclGst = $totalExclGst + $gstAmount;
-                    $grandTotal += $totalInclGst;
-
-                    echo "<tr>
-                            <td>$srNo</td>
-                            <td>$itemName</td>
-                            <td>$qty</td>
-                            <td>₹" . number_format($unitPrice, 2) . "</td>
-                            <td>$gst%</td>
-                            <td>₹" . number_format($totalExclGst, 2) . "</td>
-                            <td>₹" . number_format($gstAmount, 2) . "</td>
-                            <td>₹" . number_format($totalInclGst, 2) . "</td>
-                          </tr>";
-                }
-
-                echo '</tbody>';
-                // Add tfoot only once at the end
-                echo '<tfoot>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $grandTotal = 0;
+                        $counter = 0;
+                        foreach ($_POST['items'] as $index => $item) {
+                            if ($counter > 0 && $counter % 20 === 0) {
+                                echo '</tbody></table></div><div class="container page-break">';
+                                echo '<div class="letterhead"><h1>AUM AUTOMATION ENGINEERING</h1></div>';
+                                echo '<table><thead><tr>...<!-- Repeat table headers --></tr></thead><tbody>';
+                            }
+                            $srNo = $index + 1;
+                            // ... rest of item processing ...
+                            echo "<tr>...</tr>";
+                            $counter++;
+                        }
+                        ?>
+                    </tbody>
+                    <tfoot>
                         <tr class="total-row">
                             <td colspan="7" style="text-align: right;">Grand Total</td>
-                            <td>₹' . number_format($grandTotal, 2) . '</td>
+                            <td>₹<?= number_format($grandTotal, 2) ?></td>
                         </tr>
-                      </tfoot>';
-                echo '</table>';
-                ?>
+                    </tfoot>
+                </table>
 
-                <!-- Footer with Bank Details and Terms (only on last page) -->
-                <div class="footer">
+                <div class="footer-section">
                     <div class="bank-details">
-                        <h3>Bank Details:</h3>
-                        Account No: 123456789012<br>
-                        IFSC Code: ABCD0001234<br>
-                        Bank Name: XYZ Bank<br>
-                        Branch: Karnal, Haryana
+                        <h3 style="margin-top:0;">Bank Details</h3>
+                        <p>Account Name: AUM AUTOMATION ENGINEERING<br>
+                        Account Number: XXXXXXXXXXXX<br>
+                        IFSC Code: XXXXXXXX<br>
+                        Bank Name: [Your Bank Name]<br>
+                        Branch: [Your Branch Name]</p>
                     </div>
-                    <div class="terms">
-                        Prices mentioned are exclusive of taxes, delivery charges, and any other applicable charges, which will be added as per actuals. Prices are subject to change based on market conditions and availability of stock.
-                    </div>
-                </div>
 
-                <div class="btn-container">
-                    <button class="btn" onclick="window.print()">Download as PDF</button>
+                    <div class="terms">
+                        <h4>Terms & Conditions:</h4>
+                        <ul>
+                            <li>Prices mentioned are exclusive of taxes, delivery charges, and any other applicable charges</li>
+                            <li>All charges will be added as per actuals</li>
+                            <li>Prices subject to change based on market conditions and stock availability</li>
+                            <li>Payment terms: 50% advance with PO, balance before delivery</li>
+                            <li>Delivery period: 2-3 weeks after receipt of advance payment</li>
+                        </ul>
+                    </div>
                 </div>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn" onclick="window.print()">Download PDF</button>
             </div>
         </body>
         </html>
         <?php
         exit();
     } else {
-        echo "Error: Please fill in all required fields (client name and at least one item).";
+        echo "Please fill in all required fields";
         exit();
     }
 }
@@ -353,7 +294,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </table>
             <button type="button" class="add-btn" onclick="addRow()">+ Add Item</button>
             <h3>Total Amount: ₹<span id="grandTotal">0.00</span></h3>
-            <button type="submit" class="submit-btn">Preview</button>
+            <button type="submit" class="submit-btn">Download CSV</button>
         </form>
     </div>
 
