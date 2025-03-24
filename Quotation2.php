@@ -329,6 +329,9 @@
     }
 
     function downloadPDF(today, data) {
+        console.log("Today = " + today )
+        console.log(data)
+        return;
         const { clientName, clientAddress, clientGst, clientPhone, items } = data;
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({
