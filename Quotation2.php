@@ -20,7 +20,8 @@
         .submit-btn { background-color: #28a745; color: white; }
         .total-row { font-weight: bold; background-color: #f2f2f2; }
         .error { color: red; text-align: center; }
-    </style>
+    </style> 
+    
 </head>
 <body>
     <div class="container">
