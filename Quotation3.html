@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quotation Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      color: #333;
+      text-align: center;
+    }
+    .company-details, .client-details {
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .company-details h3, .client-details h3 {
+      margin: 0 0 10px;
+      color: #555;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .add-btn {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .delete-btn {
+      background-color: #ff4444;
+      color: white;
+    }
+    .submit-btn, .back-btn {
+      background-color: #008CBA;
+      color: white;
+    }
+    .total-row {
+      font-weight: bold;
+      background-color: #f2f2f2;
+    }
+    .error {
+      color: red;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    /* Preview Styles */
+    .preview-container {
+      display: none;
+      margin-top: 20px;
+    }
+    .preview-container .header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #007bff;
+    }
+    .preview-container .header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #003087;
+    }
+    .preview-container .details-container {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      font-size: 14px;
+      flex-wrap: wrap;
+    }
+    .preview-container .details-box {
+      flex: 1 1 45%;
+      margin: 10px;
+    }
+    .preview-container .details-box h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      color: #003087;
+      background: #e6f0ff;
+      padding: 5px;
+      border-radius: 3px;
+    }
+    .preview-container table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 13px;
+    }
+    .preview-container th, .preview-container td {
+      border: 1px solid #d0d0d0;
+      padding: 8px;
+      text-align: center;
+    }
+    .preview-container th {
+      background-color: #003087;
+      color: #fff;
+      font-weight: bold;
+    }
+    .preview-container .total-row {
+      background-color: #e9ecef;
+      font-weight: bold;
+    }
+    .preview-container .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #333;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .preview-container .bank-details {
+      width: 48%;
+      padding: 10px;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 5px;
+    }
+    .preview-container .terms {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      color: #666;
+      width: 100%;
+    }
+    .preview-container .btn-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .preview-container .print-btn {
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .preview-container .print-btn:hover {
+      background-color: #218838;
+    }
+    .page-break {
+      page-break-before: always;
+    }
+    @media print {
+      .btn-container, .back-btn {
+        display: none;
+      }
+      .container {
+        box-shadow: none;
+        margin: 0;
+        width: 100%;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+    }
+    @media (max-width: 768px) {
+      .preview-container .details-box {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+      .preview-container .bank-details {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+      .preview-container table {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="formContainer">
+    <h1>Quotation Generator</h1>
+    <div class="company-details">
+      <h3>Our Details</h3>
+      <p>Address: ABC, From State</p>
+      <p>PIN Code: 123456</p>
+      <p>Phone: 127927927</p>
+    </div>
+    <h2>Enter Quotation Details</h2>
+    <div id="error" class="error"></div>
+    <form id="quotationForm">
+      <div class="client-details">
+        <h3>Client Details</h3>
+        <label>Company Name: <input type="text" name="client_name" required></label><br>
+        <label>Address: <input type="text" name="client_address" required></label><br>
+        <label>GSTIN: <input type="text" name="client_gst" required></label><br>
+        <label>Phone: <input type="text" name="client_phone" required></label>
+      </div>
+      <table id="quotationTable">
+        <thead>
+          <tr>
+            <th>Sr No</th>
+            <th>Item Name</th>
+            <th>Qty</th>
+            <th>GST (%)</th>
+            <th>Unit Price (₹)</th>
+            <th>Total Incl. GST (₹)</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="itemsBody">
+          <tr>
+            <td>1</td>
+            <td><input type="text" name="items[0][name]" required></td>
+            <td><input type="number" class="qty" name="items[0][qty]" value="1" min="1" required onchange="updatePrice(this.closest('tr'))"></td>
+            <td><input type="number" class="gst" name="items[0][gst]" value="18" min="0" max="100" step="0.01" required onchange="updatePrice(this.closest('tr'))"></td>
+            <td><input type="number" class="price" name="items[0][price]" value="0" min="0" step="0.01" required onchange="updatePrice(this.closest('tr'))"></td>
+            <td class="total">0.00</td>
+            <td><button type="button" class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" class="add-btn" onclick="addRow()">+ Add Item</button>
+      <h3>Total Amount: ₹<span id="grandTotal">0.00</span></h3>
+      <button type="submit" class="submit-btn">Preview</button>
+    </form>
+  </div>
+
+  <!-- Preview Section -->
+  <div class="container preview-container" id="previewContainer">
+    <!-- Preview will be injected here -->
+  </div>
+
+  <script>
+    let rowCount = 1;
+    const itemsPerPage = 20;
+
+    function updatePrice(row) {
+      const qty = parseFloat(row.querySelector('.qty').value) || 0;
+      const price = parseFloat(row.querySelector('.price').value) || 0;
+      const gst = parseFloat(row.querySelector('.gst').value) || 0;
+      const totalExclGst = qty * price;
+      const gstAmount = totalExclGst * (gst / 100);
+      const totalInclGst = totalExclGst + gstAmount;
+      row.querySelector('.total').innerText = totalInclGst.toFixed(2);
+      updateTotalAmount();
+    }
+
+    function updateTotalAmount() {
+      let totalAmount = 0;
+      document.querySelectorAll('.total').forEach(cell => {
+        totalAmount += parseFloat(cell.innerText) || 0;
+      });
+      document.getElementById('grandTotal').innerText = totalAmount.toFixed(2);
+    }
+
+    function addRow() {
+      const tbody = document.getElementById('itemsBody');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td>${rowCount + 1}</td>
+        <td><input type="text" name="items[${rowCount}][name]" required></td>
+        <td><input type="number" class="qty" name="items[${rowCount}][qty]" value="1" min="1" required onchange="updatePrice(this.closest('tr'))"></td>
+        <td><input type="number" class="gst" name="items[${rowCount}][gst]" value="18" min="0" max="100" step="0.01" required onchange="updatePrice(this.closest('tr'))"></td>
+        <td><input type="number" class="price" name="items[${rowCount}][price]" value="0" min="0" step="0.01" required onchange="updatePrice(this.closest('tr'))"></td>
+        <td class="total">0.00</td>
+        <td><button type="button" class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+      `;
+      tbody.appendChild(newRow);
+      rowCount++;
+    }
+
+    function deleteRow(button) {
+      const tbody = document.getElementById('itemsBody');
+      if (tbody.rows.length > 1) {
+        button.closest('tr').remove();
+        updateRowNumbers();
+        updateTotalAmount();
+      } else {
+        alert("Cannot delete the last row.");
+      }
+    }
+
+    function updateRowNumbers() {
+      const rows = document.querySelectorAll('#itemsBody tr');
+      rows.forEach((row, index) => {
+        row.cells[0].innerText = index + 1;
+      });
+    }
+
+    // Handle form submission: validate and generate preview
+    document.getElementById('quotationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const errorDiv = document.getElementById('error');
+      errorDiv.innerText = '';
+      
+      // Get client details
+      const clientName = this.client_name.value.trim();
+      const clientAddress = this.client_address.value.trim();
+      const clientGST = this.client_gst.value.trim();
+      const clientPhone = this.client_phone.value.trim();
+
+      if (!clientName || !clientAddress || !clientGST || !clientPhone) {
+        errorDiv.innerText = "Please fill in all client details.";
+        return;
+      }
+      
+      // Get items from the table
+      const items = [];
+      document.querySelectorAll('#itemsBody tr').forEach((row, index) => {
+        const itemName = row.querySelector('input[name^="items"]').value.trim();
+        const qty = parseFloat(row.querySelector('.qty').value) || 0;
+        const gst = parseFloat(row.querySelector('.gst').value) || 0;
+        const price = parseFloat(row.querySelector('.price').value) || 0;
+        if(itemName && qty > 0) {
+          items.push({ name: itemName, qty, gst, price });
+        }
+      });
+
+      if (items.length === 0) {
+        errorDiv.innerText = "Please add at least one item.";
+        return;
+      }
+
+      // Generate preview HTML
+      generatePreview({ clientName, clientAddress, clientGST, clientPhone, items });
+    });
+
+    function generatePreview(data) {
+      const { clientName, clientAddress, clientGST, clientPhone, items } = data;
+      let grandTotal = 0;
+      let tableHTML = '';
+      const totalItems = items.length;
+      const pages = Math.ceil(totalItems / itemsPerPage);
+
+      // Build table header (reused on each page)
+      const tableHeader = `<thead>
+        <tr>
+          <th>Sr No</th>
+          <th>Item Name</th>
+          <th>Qty</th>
+          <th>Unit Price (₹)</th>
+          <th>GST (%)</th>
+          <th>Total Excl. GST (₹)</th>
+          <th>GST Amount (₹)</th>
+          <th>Total Incl. GST (₹)</th>
+        </tr>
+      </thead>`;
+
+      // Build table body with pagination logic
+      let tableBody = '';
+      for (let i = 0; i < totalItems; i++) {
+        if (i > 0 && i % itemsPerPage === 0) {
+          // Close current table and add page break, then start new table header/body
+          tableHTML += `<table>${tableHeader}<tbody>${tableBody}</tbody></table>
+            <div class="page-break"></div>`;
+          tableBody = '';
+        }
+        const item = items[i];
+        const srNo = i + 1;
+        const totalExclGst = item.qty * item.price;
+        const gstAmount = totalExclGst * (item.gst / 100);
+        const totalInclGst = totalExclGst + gstAmount;
+        grandTotal += totalInclGst;
+
+        tableBody += `<tr>
+          <td>${srNo}</td>
+          <td>${item.name}</td>
+          <td>${item.qty}</td>
+          <td>₹${item.price.toFixed(2)}</td>
+          <td>${item.gst}%</td>
+          <td>₹${totalExclGst.toFixed(2)}</td>
+          <td>₹${gstAmount.toFixed(2)}</td>
+          <td>₹${totalInclGst.toFixed(2)}</td>
+        </tr>`;
+      }
+      // Append the last page’s table
+      tableHTML += `<table>${tableHeader}<tbody>${tableBody}</tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td colspan="7" style="text-align: right;">Grand Total</td>
+            <td>₹${grandTotal.toFixed(2)}</td>
+          </tr>
+        </tfoot>
+      </table>`;
+
+      // Create header with current date
+      const currentDate = new Date().toLocaleDateString();
+      const previewHTML = `
+        <div class="header">
+          <h1>TEST</h1>
+          <p>Quotation | Date: ${currentDate}</p>
+        </div>
+        <div class="details-container">
+          <div class="details-box">
+            <h3>Quotation By:</h3>
+            tes<br>
+            Address: XXXXX XXXX XXXX XXX XXXX, XXXX, XXXX<br>
+            PIN Code: XXX<br>
+            Phone: +91-94664-XXXXX, +91-85728-XXXXX<br>
+            Email: info___.com
+          </div>
+          <div class="details-box">
+            <h3>Quotation To:</h3>
+            ${clientName}<br>
+            Address: ${clientAddress}<br>
+            GSTIN: ${clientGST}<br>
+            Phone: ${clientPhone}
+          </div>
+        </div>
+        ${tableHTML}
+        <div class="footer">
+          <div class="bank-details">
+            <h3>Bank Details:</h3>
+            Account No: 123456789012<br>
+            IFSC Code: ABCD0001234<br>
+            Bank Name: XYZ Bank<br>
+            Branch: Karnal, Haryana
+          </div>
+          <div class="terms">
+            Prices mentioned are exclusive of taxes, delivery charges, and any other applicable charges, which will be added as per actuals. Prices are subject to change based on market conditions and availability of stock.
+          </div>
+        </div>
+        <div class="btn-container">
+          <button class="print-btn" onclick="window.print()">Download as PDF</button>
+          <button class="back-btn" onclick="goBack()">Back</button>
+        </div>
+      `;
+
+      // Hide form and show preview
+      document.getElementById('formContainer').style.display = 'none';
+      const previewContainer = document.getElementById('previewContainer');
+      previewContainer.innerHTML = previewHTML;
+      previewContainer.style.display = 'block';
+    }
+
+    function goBack() {
+      document.getElementById('previewContainer').style.display = 'none';
+      document.getElementById('formContainer').style.display = 'block';
+    }
+
+    // Initial price update on first row
+    document.addEventListener("DOMContentLoaded", function () {
+      updatePrice(document.querySelector('#itemsBody tr'));
+    });
+  </script>
+</body>
+</html>
